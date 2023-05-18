@@ -6,6 +6,7 @@ import kotlin.math.pow
 import kotlin.math.atan2
 import kotlin.math.atan
 import kotlin.math.PI
+import kotlin.math.round
 
 @JsonIgnoreProperties("unit", "normal", "degree", "magnitude")
 data class Vector2D(val dx: Double, val dy: Double) {
@@ -55,16 +56,21 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   operator fun minus(v: Vector2D): Vector2D {
+    if(v.dx.isNaN()){
+      return Vector2D(-this.dx, -this.dy )  
+    }
     return Vector2D(this.dx - v.dx, this.dy - v.dy)
   }
 
   fun scalarProject(target: Vector2D): Double {
-    return INVALID_DOUBLE
+    return this.times(target)/target.magnitude
   }
 
+  
+
   fun vectorProject(target: Vector2D): Vector2D {
-    return this.times(target)*this
-    // ((this, target)/base.pow(2))*target
+    val coef: Double = (this.times(target)/target.dx.pow(2) + target.dy.pow(2))
+    return Vector2D(round(coef * target.dx), round(coef * target.dy)) 
   }
 }
 
