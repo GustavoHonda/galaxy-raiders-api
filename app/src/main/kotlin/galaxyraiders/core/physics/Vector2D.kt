@@ -56,6 +56,7 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   operator fun minus(v: Vector2D): Vector2D {
+    //maybe transverse implementation?
     if(v.dx.isNaN()){
       return Vector2D(-this.dx, -this.dy )  
     }
@@ -66,11 +67,9 @@ data class Vector2D(val dx: Double, val dy: Double) {
     return this.times(target)/target.magnitude
   }
 
-  
-
   fun vectorProject(target: Vector2D): Vector2D {
     val coef: Double = (this.times(target)/target.dx.pow(2) + target.dy.pow(2))
-    return Vector2D(round(coef * target.dx), round(coef * target.dy)) 
+    return Vector2D(coef * target.dx, coef * target.dy) 
   }
 }
 

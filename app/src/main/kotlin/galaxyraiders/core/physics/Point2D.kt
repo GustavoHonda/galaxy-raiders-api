@@ -18,6 +18,8 @@ data class Point2D(val x: Double, val y: Double) {
     return "Point2D(x=$x, y=$y)"
   }
 
+  val base: Double = kotlin.math.sqrt(this.x.pow(2) + this.y.pow(2))
+
   fun toVector(): Vector2D {
     val vector: Vector2D = Vector2D(this.x,this.y)
     return vector
@@ -34,6 +36,7 @@ data class Point2D(val x: Double, val y: Double) {
 
   fun contactVector(p: Point2D): Vector2D {
     return INVALID_VECTOR
+    // Vector2D(this.x / base, this.y / base)
   }
 
   fun contactDirection(p: Point2D): Vector2D {
