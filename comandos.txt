@@ -1,0 +1,27 @@
+gradle
+
+sudo pre-commit run --all-files
+sudo docker compose --profile dev run --rm linter
+
+
+COMPILATION:
+sudo docker compose --profile dev build
+sudo docker compose --profile prod build
+
+
+TESTE:
+sudo docker compose --profile dev up tester
+
+
+EXECUTION:
+sudo docker compose --profile dev up demo --build
+sudo docker compose --profile prod up game --build
+
+sudo docker compose --profile dev run --rm demo gradle --no-daemon tasks
+sudo docker compose --profile dev run --rm demo gradle --no-daemon {task}
+
+
+TO_RUN_TEST
+sudo docker compose --profile dev build
+sudo docker compose --profile dev up demo --build
+sudo docker compose --profile dev up tester
