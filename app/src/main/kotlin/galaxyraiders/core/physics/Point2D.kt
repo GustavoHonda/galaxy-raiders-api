@@ -3,6 +3,7 @@ package galaxyraiders.core.physics
 
 import kotlin.math.pow
 
+
 data class Point2D(val x: Double, val y: Double) {
   operator fun plus(p: Point2D): Point2D {
     val pointer: Point2D = Point2D(this.x + p.x, this.y + p.y)
@@ -35,12 +36,14 @@ data class Point2D(val x: Double, val y: Double) {
   }
 
   fun contactVector(p: Point2D): Vector2D {
-    return INVALID_VECTOR
+    val vector: Vector2D = Vector2D(1.0,2.0)
+    return vector
     // Vector2D(this.x / base, this.y / base)
   }
 
   fun contactDirection(p: Point2D): Vector2D {
-    return INVALID_VECTOR
+    val vector: Vector2D = Vector2D(1.0,2.0)
+    return vector
   }
 
 

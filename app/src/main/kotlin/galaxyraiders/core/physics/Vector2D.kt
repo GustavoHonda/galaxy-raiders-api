@@ -6,7 +6,7 @@ import kotlin.math.pow
 import kotlin.math.atan2
 import kotlin.math.atan
 import kotlin.math.PI
-import kotlin.math.round
+import kotlin.math.abs
 
 @JsonIgnoreProperties("unit", "normal", "degree", "magnitude")
 data class Vector2D(val dx: Double, val dy: Double) {
@@ -22,8 +22,27 @@ data class Vector2D(val dx: Double, val dy: Double) {
   val radiant: Double
     get() = atan2(this.dy,this.dx)
 
+  val x_sign: Boolean = this.dx > 0
+
+  val y_sign: Boolean = this.dy > 0
+
+  fun Boolean.toInt() = if (this) 1 else 0
+
+  val degree_in_rad: Double = atan(abs(this.dy)/abs(this.dx)) 
+
+  val ajust_sign: Double = (-1.0).pow((!y_sign).toInt()) 
+
+  fun ajust_side(degree: Double): Double{
+      if(!x_sign){
+        return 180 - degree;
+      }
+      else{
+        return degree;
+      }
+  }
+
   val degree: Double
-    get() = atan(this.dy/this.dx) * (180/PI)
+    get() =  ajust_sign * ajust_side(degree_in_rad * (180/PI))
 
   val unit: Vector2D
     get() = Vector2D(this.dx / base, this.dy / base)
@@ -52,7 +71,7 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   operator fun unaryMinus(): Vector2D {
-    return INVALID_VECTOR
+    return Vector2D(-this.dx,-this.dy )
   }
 
   operator fun minus(v: Vector2D): Vector2D {
@@ -64,12 +83,18 @@ data class Vector2D(val dx: Double, val dy: Double) {
   }
 
   fun scalarProject(target: Vector2D): Double {
-    return this.times(target)/target.magnitude
+    val scalar: Double = this.times(target/target.magnitude)
+    return scalar
   }
 
+  fun Double.round() = String.format("%.3f", this).toDouble()
+
   fun vectorProject(target: Vector2D): Vector2D {
-    val coef: Double = (this.times(target)/target.dx.pow(2) + target.dy.pow(2))
-    return Vector2D(coef * target.dx, coef * target.dy) 
+    val lenth: Double = (target.dx.pow(2) + target.dy.pow(2))
+    val coef: Double = (this.times(target)/lenth)
+    return Vector2D(
+                    (coef * target.dx).round(),
+                    (coef * target.dy).round())
   }
 }
 
