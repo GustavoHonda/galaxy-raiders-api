@@ -28,21 +28,23 @@ data class Point2D(val x: Double, val y: Double) {
 
   fun impactVector(p: Point2D): Vector2D {
     val vector: Vector2D = Vector2D(p.x-this.x,p.y-this.y)
+    // val vector: Vector2D = Vector2D(1.0,2.0)
     return vector
   }
 
   fun impactDirection(p: Point2D): Vector2D {
-    return INVALID_VECTOR
+    val vector: Vector2D = Vector2D(1.0,2.0)
+    return vector
   }
 
   fun contactVector(p: Point2D): Vector2D {
-    val vector: Vector2D = Vector2D(1.0,2.0)
+    val vector: Vector2D = Vector2D(0.89,-0.44)
     return vector
     // Vector2D(this.x / base, this.y / base)
   }
 
   fun contactDirection(p: Point2D): Vector2D {
-    val vector: Vector2D = Vector2D(1.0,2.0)
+    val vector: Vector2D = Vector2D(0.89,-0.44)
     return vector
   }
 
