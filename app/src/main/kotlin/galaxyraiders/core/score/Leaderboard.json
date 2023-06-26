@@ -1,6 +1,21 @@
 {
-        "next_player" : 3,
-        "first": 999,
-        "second": 998,
-        "third": 997
+        "next_player" : 6,
+        "first": {
+                "player_id" : 1,
+                "score" : 999,
+                "time" : "2",
+                "hit_asteroids" : 0 
+        },
+        "second": {
+                "player_id" : 2,
+                "score" : 998,
+                "time" : "2",
+                "hit_asteroids" : 0 
+        },
+        "third": {
+                "player_id" : 3,
+                "score" : 997,
+                "time": "2023 25 06T0 23 44 972",
+                "hit_asteroids" : 0 
+        }
 }

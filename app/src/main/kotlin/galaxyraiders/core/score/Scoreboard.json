@@ -1,11 +1,11 @@
 {
-        "player_id" : 1,
+        "player_id" : 4,
         "score" : 1,
         "time" : "2023-25-06T0:23:44.972",
         "hit_asteroids" : 0 
 }
 {
-        "player_id" : 2,
+        "player_id" : 5,
         "score" : 1,
         "time" : "2023-25-06T0:23:48.182",
         "hit_asteroids" : 0

@@ -7,12 +7,17 @@ import galaxyraiders.ports.ui.Controller.PlayerCommand
 import galaxyraiders.ports.ui.Visualizer
 import kotlin.system.measureTimeMillis
 import java.io.File
-import java.time.LocalDateTime
+import java.io.FileWriter
 import java.io.IOException
-import java.nio.file.Files
+import java.time.LocalDateTime
+import galaxyraiders.core.game.SpaceObject
 import java.nio.file.Paths
-import java.nio.file.StandardOpenOption
+import java.nio.file.Files
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+
+val mapper = ObjectMapper()
 
 const val MILLISECONDS_PER_SECOND: Int = 1000
 
@@ -59,15 +64,16 @@ class GameEngine(
 
   var score = 0
   var hit_asteroids = 0
-  var board : Leaderboard 
+  var player = Classification(0,0,"",0)
+  var board : Leaderboard = Leaderboard(0,player,player,player)
   var time  = ""
 
   //Read from json file the 3 first high score players and the nº of the next player
   fun read_leaderboard(){
-    val path : String = "../score/Leaderboard.json"
-    var json_string : String = File(path).readText(Charsets.UTF_8)
-    leader_board = mapper.readValue(json_string) // deserialize data to String
-
+    val path : String = "src/main/kotlin/galaxyraiders/core/score/Leaderboard.json"
+    var json_string : String = File(path)
+    // .readText(Charsets.UTF_8)
+    var nboard : Leaderboard = mapper.readValue(json_string, Leaderboard::class.java) // deserialize data to String
   }
 
   // get start time of game
@@ -76,19 +82,19 @@ class GameEngine(
   }
   
   fun update_leaderboard(){
-    var new_player : Classification = Classification(next_player,score,time,hit_asteroids)
-    if(score > leader_board.third.score){
-      leader_board.third = next_player
-      if(score > leader_board.second.score){
-        leader_board.third = leader_board.second
-        leader_board.second = next_player
-        if(score > leader_board.first.score){
-          leader_board.second = leader_board.first
-          leader_board.first = next_player
+    var new_player : Classification = Classification(board.next_player,score,time,hit_asteroids)
+    if(score > board.third.score){
+      board.third = new_player
+      if(score > board.second.score){
+        board.third = board.second
+        board.second = new_player
+        if(score > board.first.score){
+          board.second = board.first
+          board.first = new_player
         }
       }  
     }
-    leader_board.next_player = leader_board.next_player + 1
+    board.next_player = board.next_player + 1
   }
 
   //Write new Leaderboard.json
@@ -96,16 +102,20 @@ class GameEngine(
     val path : String = "../score/Leaderboard.json"
     File(path).writeText("")   // empty Leaderboard.json
     update_leaderboard()
-    val data = mapper.writeValueAsString(leader_board)  //serialize data to json format
-    Files.write(path, data.toByteArray(), StandardOpenOption.APPEND)
+    val data = mapper.writeValueAsString(board)  //serialize data to json format
+    FileWriter(path, true).use {
+      it.write(data)
+    }
   }
 
   //Write new score in Scoreboard.json
   fun write_scoreboard(){
     val path : String = "../score/Scoreboard.json"
-    var new_player : Classification = Classification(next_player,score,time,hit_asteroids)
-    val data = mapper.writeValueAsString(next_player)
-    Files.write(path, data.toByteArray(), StandardOpenOption.APPEND)
+    var new_player : Classification = Classification(board.next_player,score,time,hit_asteroids)
+    val data = mapper.writeValueAsString(new_player)
+    FileWriter(path, true).use {
+      it.write(data)
+    }
   }
 
   fun execute() {
@@ -156,13 +166,13 @@ class GameEngine(
     this.generateAsteroids()
   }
 
-  fun increase_score(asteroid : spaceObjects){
-    var points = asteroid.radius*asteroid.mass
+  fun increase_score(asteroid : SpaceObject){
+    var points : Int = (asteroid.radius + asteroid.mass).toInt()
     score = score + points
     hit_asteroids = hit_asteroids + 1
   }
 
-  fun update_score(first : spaceObjects, second : spaceObjects){
+  fun update_score(first : SpaceObject, second : SpaceObject){
     if(first.type == "Missile" && second.type == "Asteroid"){
       increase_score(second)
     }
