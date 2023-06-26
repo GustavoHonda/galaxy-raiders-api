@@ -59,11 +59,17 @@ dependencies {
   implementation("com.fasterxml.jackson.core:jackson-databind:2.13.3")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.13.3")
 
+  //Use Jackson to manipulate Json files.
+  implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
+
+
   // Use the Kotlin JUnit 5 integration.
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit5:1.6.21")
 
   // Allow JUnit 5 parameterized tests
   testImplementation("org.junit.jupiter:junit-jupiter-params:5.8.2")
+
+
 }
 
 application {

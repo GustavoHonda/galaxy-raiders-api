@@ -31,7 +31,15 @@ fun main() {
     generator, controller, visualizer
   )
 
+  gameEngine.read_leaderboard()
+  gameEngine.get_time()
+
   thread { gameEngine.execute() }
 
+  gameEngine.write_leaderboard()
+  gameEngine.write_scoreboard()
+
   ui.start()
+
+
 }
