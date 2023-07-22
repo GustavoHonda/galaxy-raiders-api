@@ -70,10 +70,12 @@ class GameEngine(
 
   //Read from json file the 3 first high score players and the nº of the next player
   fun read_leaderboard(){
-    val path : String = "src/main/kotlin/galaxyraiders/core/score/Leaderboard.json"
-    var json_string : String = File(path)
+    
+    //val path  = "src/main/kotlin/galaxyraiders/core/score/Leaderboard.json"
     // .readText(Charsets.UTF_8)
-    var nboard : Leaderboard = mapper.readValue(json_string, Leaderboard::class.java) // deserialize data to String
+    //val jsonFile = File(path)
+    //val nboard : Leaderboard = mapper.readValue(jsonFile, Leaderboard::class.java) // deserialize data to String
+    
   }
 
   // get start time of game
@@ -97,24 +99,35 @@ class GameEngine(
     board.next_player = board.next_player + 1
   }
 
+
   //Write new Leaderboard.json
   fun write_leaderboard(){
-    val path : String = "../score/Leaderboard.json"
-    File(path).writeText("")   // empty Leaderboard.json
-    update_leaderboard()
-    val data = mapper.writeValueAsString(board)  //serialize data to json format
-    FileWriter(path, true).use {
-      it.write(data)
+    try{
+      val path : String = "../score/Leaderboard.json"
+      File(path).writeText("")   // empty Leaderboard.json
+      update_leaderboard()
+      val data = mapper.writeValueAsString(board)  //serialize data to json format
+      FileWriter(path, true).use {
+        it.write(data)
+      }
+    }
+    catch(e : Exception){
+      println("Exception Leaderboard.json file missing")
     }
   }
 
   //Write new score in Scoreboard.json
   fun write_scoreboard(){
-    val path : String = "../score/Scoreboard.json"
-    var new_player : Classification = Classification(board.next_player,score,time,hit_asteroids)
-    val data = mapper.writeValueAsString(new_player)
-    FileWriter(path, true).use {
-      it.write(data)
+    try{
+      val path : String = "../score/Scoreboard.json"
+      var new_player : Classification = Classification(board.next_player,score,time,hit_asteroids)
+      val data = mapper.writeValueAsString(new_player)
+      FileWriter(path, true).use {
+        it.write(data)
+      }
+    }
+    catch(e : Exception){
+      println("Exception Scoreboard.json file missing")
     }
   }
 
